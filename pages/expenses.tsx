@@ -95,10 +95,10 @@ export default function ExpensesPage() {
   const saveEdit = async (exp: Expense) => {
     let updatedData: Partial<Expense> = {
       title: editTitle,
-      description: editDescription || null,
-      vendor: editVendor || null,
+      description: editDescription || undefined,
+      vendor: editVendor || undefined,
       amount: editAmount,
-      date: editDate || null
+      date: editDate || undefined
     }
 
     if (editFile) {
