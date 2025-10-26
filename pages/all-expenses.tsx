@@ -70,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   const { data: expensesData } = await supabase
-    .from<Expense>("expenses")
+    .from("expenses")
     .select("*")
     .order("created_at", { ascending: false });
 
