@@ -20,8 +20,8 @@ export default function IndexPage() {
   }, [])
 
   const addExpense = async () => {
-    if (!newTitle || !newAmount) {
-      alert('Title and amount are required.')
+    if (!newTitle || !newAmount || !newFile)   {
+      alert('Title, amount and receipt are required.')
       return
     }
 

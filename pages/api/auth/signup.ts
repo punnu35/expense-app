@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { data, error } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
-      email_confirm: false // Automatically confirms the user
+      email_confirm: true // Automatically confirms the user
     });
 
     if (error) return res.status(500).json({ error: error.message });
