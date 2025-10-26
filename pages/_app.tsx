@@ -1,21 +1,18 @@
-import { AppProps } from "next/app";
-import { useState } from "react";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
-import { SessionContextProvider } from "@supabase/auth-helpers-react";
-import Navbar from "../components/Navbar";
-import "../styles/globals.css";
+import "../styles/globals.css"
+import type { AppProps } from "next/app"
+import Navbar from "../components/Navbar"
+import Footer from "../components/Footer"
 
-export default function MyApp({ Component, pageProps }: AppProps) {
-  // Use the new recommended function
-  const [supabaseClient] = useState(() => createPagesBrowserClient());
-
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <SessionContextProvider
-      supabaseClient={supabaseClient}
-      initialSession={pageProps.initialSession}
-    >
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <Component {...pageProps} />
-    </SessionContextProvider>
-  );
+      <main className="flex-grow">
+        <Component {...pageProps} />
+      </main>
+      <Footer />
+    </div>
+  )
 }
+
+export default MyApp
