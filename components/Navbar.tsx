@@ -5,8 +5,10 @@ import { supabase } from '../lib/supabaseClient'
 export default function Navbar() {
   const [user, setUser] = useState<any>(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [isApprover, setIsApprover] = useState(false)
 
   const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL
+  const approverEmail = process.env.NEXT_PUBLIC_APPROVER_EMAIL
 
   // Fetch session on load
   useEffect(() => {
@@ -15,9 +17,11 @@ export default function Navbar() {
       if (data.user) {
         setUser(data.user)
         setIsAdmin(data.user.email === adminEmail)
+        setIsApprover(data.user.email === approverEmail)
       } else {
         setUser(null)
         setIsAdmin(false)
+        setIsApprover(false)
       }
     }
     fetchUser()
@@ -27,9 +31,11 @@ export default function Navbar() {
       if (session?.user) {
         setUser(session.user)
         setIsAdmin(session.user.email === adminEmail)
+        setIsApprover(session.user.email === approverEmail)
       } else {
         setUser(null)
         setIsAdmin(false)
+        setIsApprover(false)
       }
     })
     return () => {
@@ -42,9 +48,10 @@ export default function Navbar() {
     if (error) {
       console.error('Logout error:', error.message)
     } else {
-      setUser(null)          // update state immediately
+      setUser(null)
       setIsAdmin(false)
-      window.location.href = '/login' // redirect to login
+      setIsApprover(false)
+      window.location.href = '/login'
     }
   }
 
@@ -53,7 +60,8 @@ export default function Navbar() {
       <div className="flex items-center gap-4">
         <Link href="/">Home</Link>
         {user && <Link href="/expenses">{isAdmin ? 'All Expenses' : 'My Expenses'}</Link>}
-        {user && <Link href="/reports">Reports</Link>} {/* <-- Added Reports link */}
+        {(isAdmin || isApprover) && <Link href="/approvals">Approvals</Link>}
+        {user && <Link href="/reports">Reports</Link>}
       </div>
 
       <div className="flex items-center gap-4">

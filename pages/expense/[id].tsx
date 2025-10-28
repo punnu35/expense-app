@@ -9,7 +9,7 @@ interface Expense {
   vendor?: string
   amount: number
   date?: string
-  receipts_url?: string
+  receipts_url?: string[]
   status: string
   created_at?: string
   user_email?: string
@@ -53,13 +53,25 @@ export default function ExpenseDetail() {
         <p><span className="font-semibold">User Email:</span> {expense.user_email || '-'}</p>
         <p><span className="font-semibold">Created At:</span> {expense.created_at || '-'}</p>
         <div>
-          <span className="font-semibold">Receipt:</span>
+          <span className="font-semibold">Receipts:</span>
           {expense.receipts_url ? (
-            <img
-              src={expense.receipts_url}
-              alt="Receipt"
-              className="mt-2 border rounded max-w-full"
-            />
+            <div className="mt-2 flex flex-wrap gap-2">
+              {expense.receipts_url.map((url, idx) => (
+                <a
+                  key={idx}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="border rounded overflow-hidden"
+                >
+                  <img
+                    src={url}
+                    alt={`Receipt ${idx + 1}`}
+                    className="max-h-48 object-contain"
+                  />
+                </a>
+              ))}
+            </div>
           ) : (
             <span> - </span>
           )}

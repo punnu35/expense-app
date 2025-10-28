@@ -8,7 +8,7 @@ export default function IndexPage() {
   const [newVendor, setNewVendor] = useState('')
   const [newAmount, setNewAmount] = useState<number>(0)
   const [newDate, setNewDate] = useState('')
-  const [newFile, setNewFile] = useState<File | null>(null)
+  const [newFiles, setNewFiles] = useState<FileList | null>(null)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -20,22 +20,26 @@ export default function IndexPage() {
   }, [])
 
   const addExpense = async () => {
-    if (!newTitle || !newAmount || !newFile)   {
+    if (!newTitle || !newAmount || !newFiles || newFiles.length === 0)   {
       alert('Title, amount and receipt are required.')
       return
     }
 
     let publicUrl = null
-    if (newFile) {
-      const fileExt = newFile.name.split('.').pop()
-      const fileName = `${Date.now()}.${fileExt}`
+    const uploadedUrls: string[] = []
+    for (const file of Array.from(newFiles)) {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}_${Math.random().toString(36).slice(2)}.${fileExt}`
       const { error: uploadError } = await supabase.storage
         .from('receipts')
-        .upload(fileName, newFile)
-      if (uploadError) return alert(uploadError.message)
+        .upload(fileName, file)
 
+      if (uploadError) {
+        alert(`Error uploading ${file.name}: ${uploadError.message}`)
+        return
+      }
       const { data } = supabase.storage.from('receipts').getPublicUrl(fileName)
-      publicUrl = data.publicUrl
+      uploadedUrls.push(data.publicUrl)
     }
 
     const { error, data } = await supabase
@@ -47,7 +51,7 @@ export default function IndexPage() {
           vendor: newVendor || null,
           amount: newAmount,
           date: newDate || null,
-          receipts_url: publicUrl,
+          receipts_url: uploadedUrls,
           status: 'pending',
           user_id: user.id,
           user_email: user.email
@@ -62,8 +66,9 @@ export default function IndexPage() {
       setNewVendor('')
       setNewAmount(0)
       setNewDate('')
-      setNewFile(null)
+      setNewFiles(null)
       alert('Expense added!')
+      window.location.href = '/expenses'
     }
   }
 
@@ -127,7 +132,8 @@ export default function IndexPage() {
     <input
       type="file"
       accept="image/*"
-      onChange={(e) => setNewFile(e.target.files ? e.target.files[0] : null)}
+      multiple
+      onChange={(e) => setNewFiles(e.target.files)}
       className="border rounded px-2 py-1 flex-1"
     />
   </div>
