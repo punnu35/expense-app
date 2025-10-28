@@ -168,6 +168,7 @@ export default function ExpensesPage() {
       {expenses.length === 0 ? (
         <p className="text-gray-500">No expenses found.</p>
       ) : (
+        <div className="overflow-x-auto">
         <table className="min-w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
@@ -317,6 +318,7 @@ export default function ExpensesPage() {
             })}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   )

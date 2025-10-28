@@ -7,6 +7,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
     <Head>
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+
         <link rel="icon" href="/favicon.png" /> {/* <-- place your favicon file in the public folder */}
         <title>Cub Scout Expense App</title> {/* optional: page title */}
       </Head>

@@ -57,7 +57,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 text-white p-4 flex justify-between">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-4">
         <Link href="/">Home</Link>
         {user && <Link href="/expenses">{isAdmin ? 'All Expenses' : 'My Expenses'}</Link>}
         {(isAdmin || isApprover) && <Link href="/approvals">Approvals</Link>}
